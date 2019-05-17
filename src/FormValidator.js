@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import './FormValidator.css';
 import { Button, Container, Row, Col } from 'react-bootstrap';
+import Calculator from './Calculator.js'
 
-const emailRegex = new RegExp(
-    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-  );
+
 
   class FormValidator extends Component{
     
@@ -13,14 +12,16 @@ const emailRegex = new RegExp(
     constructor(props){
         super(props);
         this.state = {
-            name: "",
-            email: "",
-            password: "",
+            homePrice: "",
+            downPayment: "",
+            loanTerm: "",
+            interestRate: "",
             // isValid: false,
             formErrors: {
-                nameError:'',
-                emailError:'',
-                passwordError:'',
+                homePriceError:'',
+                downPaymentError:'',
+                loanTermError:'',
+                interestRateError:'',
             },
         }
         
@@ -53,43 +54,43 @@ const emailRegex = new RegExp(
         console.log(name);
         console.log(value)
 
-        switch(name){
+        // switch(name){
 
-            case 'name':
-                if(value){
-                    formErrors.nameError = ''
-                    console.log('in nameValidator+')
-                    break;
-                }else{
-                    formErrors.nameError = 'You must enter a name'
-                    console.log('in nameValidator-')
-                    break;
-                }
-            case 'email':
-                if(emailRegex.test(value)){
-                    formErrors.emailError = '';
-                    console.log('in emailValidator+')
-                    break;
-                }else{
-                    formErrors.emailError = 'Please enter a valid email'; 
-                    console.log('in emailValidator-')
-                    break;
-                }
+        //     case 'name':
+        //         if(value){
+        //             formErrors.nameError = ''
+        //             console.log('in nameValidator+')
+        //             break;
+        //         }else{
+        //             formErrors.nameError = 'You must enter a name'
+        //             console.log('in nameValidator-')
+        //             break;
+        //         }
+        //     case 'email':
+        //         if(emailRegex.test(value)){
+        //             formErrors.emailError = '';
+        //             console.log('in emailValidator+')
+        //             break;
+        //         }else{
+        //             formErrors.emailError = 'Please enter a valid email'; 
+        //             console.log('in emailValidator-')
+        //             break;
+        //         }
 
-            case 'password':
-                console.log(`password length: ${value.length}`)
-                if(value.length>3){
-                    formErrors.passwordError = '';
-                    console.log('in passwordValidator+')
-                    break;
-                }else{
-                    formErrors.passwordError = 'Password must be longer than 3 characters';
-                    console.log('in passwordValidator-')
-                    break;
-                }
-            default:
-                break;
-        }
+        //     case 'password':
+        //         console.log(`password length: ${value.length}`)
+        //         if(value.length>3){
+        //             formErrors.passwordError = '';
+        //             console.log('in passwordValidator+')
+        //             break;
+        //         }else{
+        //             formErrors.passwordError = 'Password must be longer than 3 characters';
+        //             console.log('in passwordValidator-')
+        //             break;
+        //         }
+        //     default:
+        //         break;
+        // }
 
         
         this.setState({
@@ -130,45 +131,56 @@ const emailRegex = new RegExp(
                     <Row>
                         <Col>
                             <form className="m-4" onSubmit={this.handleSubmit} noValidate >
-                                <h3>Login</h3>
+                                <h3>Mortgage Calculator</h3>
                                 <div >
-                                    {/* <label htmlFor="Name">Name: </label> */}
+                                    {/* <label htmlFor="Home Price">Home Price: </label> */}
                                     <input
-                                        className={formErrors.nameError.length > 0 ? "error" : null}
+                                        className={formErrors.homePriceError.length > 0 ? "error" : null}
                                         type="text"
-                                        name="name"
-                                        placeholder="name"
-                                        value={this.state.name}
+                                        name="homePrice"
+                                        placeholder="$ Home price"
+                                        value={this.state.homePrice}
                                         onChange={this.handleChange}
                                     />
                                 </div>
-                                <div className='errorMsg'>{this.state.formErrors.nameError}</div>
+                                <div >
+                                    {/* <label htmlFor="Down Payment">Down Payment: </label> */}
+                                    <input
+                                        className={formErrors.downPaymentError.length > 0 ? "error" : null}
+                                        type="text"
+                                        name="downPayment"
+                                        placeholder="$ Down Payment"
+                                        value={this.state.downPayment}
+                                        onChange={this.handleChange}
+                                    />
+                                </div>
+                                <div className='errorMsg'>{this.state.formErrors.downPaymentError}</div>
                                 <div> 
-                                    {/* <label htmlFor="Email">Email: </label> */}
+                                    {/* <label htmlFor="Loan Term">Loan Term: </label> */}
                                     <input
-                                        className={formErrors.emailError.length > 0 ? "error" : null}
+                                        className={formErrors.loanTermError.length > 0 ? "error" : null}
                                         type="text"
-                                        name="email"
-                                        placeholder="email"
-                                        value={this.state.email}
+                                        name="loanTerm"
+                                        placeholder="Loan Term (yrs.)"
+                                        value={this.state.loanTerm}
                                         onChange={this.handleChange}
 
                                     />
                                 </div>
-                                <div className='errorMsg'>{this.state.formErrors.emailError}</div>
+                                <div className='errorMsg'>{this.state.formErrors.loanTermError}</div>
                                 <div>
-                                    {/* <label htmlFor="Password">Password: </label> */}
+                                    {/* <label htmlFor="interestRate">Interest Rate: </label> */}
                                     <input
-                                        className={formErrors.passwordError.length > 0 ? "error" : null}
-                                        type="password"
-                                        name="password"
-                                        placeholder="password"
-                                        value={this.state.password}
+                                        className={formErrors.interestRateError.length > 0 ? "error" : null}
+                                        type="text"
+                                        name="interestRate"
+                                        placeholder="Interest Rate (%)"
+                                        value={this.state.interestRate}
                                         onChange={this.handleChange}
 
                                     />
                                 </div>
-                                <div className='errorMsg'>{this.state.formErrors.passwordError}</div>
+                                <div className='errorMsg'>{this.state.formErrors.interestRateError}</div>
                                 <div>
                                     <Button className='btnSubmit' type="submit">Submit</Button>
                                 </div>
@@ -178,6 +190,7 @@ const emailRegex = new RegExp(
                         </Col>
                     </Row>
                 </Container>
+                <Calculator data={this.state.homePrice}></Calculator>
             </Container>
         );
     }
