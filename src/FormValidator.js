@@ -5,6 +5,7 @@ import Calculator from './Calculator.js'
 
 
 
+
   class FormValidator extends Component{
     
     
@@ -16,6 +17,7 @@ import Calculator from './Calculator.js'
             downPayment: "",
             loanTerm: "",
             interestRate: "",
+            payment: null,
             // isValid: false,
             formErrors: {
                 homePriceError:'',
@@ -32,14 +34,36 @@ import Calculator from './Calculator.js'
     }
     
     
+    calcResult(){
+        const {homePrice, downPayment, loanTerm, interestRate, payment} = this.state
+        console.log(this.state);
+        let principal = parseInt(homePrice) - parseInt(downPayment);
+        let num = (  (parseFloat(interestRate) / 100) / 12 ) * principal;
+        console.log(num);
+        let denom1 = (1+  (  (parseFloat(interestRate)/100) / 12))
+        let denom2 = -(parseInt(loanTerm)*12)  
+        let denom3 = Math.pow(denom1,denom2)
+        let denom = 1- denom3;
+        console.log(denom)
+        let monthly_payment = num / denom;
+
+        console.log(`monthly payment:  ${monthly_payment}`)
+
+        this.setState({payment:monthly_payment});
+
+        return payment
+
+    }
+    
     handleSubmit(e){
         e.preventDefault();
         const isValid = this.validate(this.state);
         if(isValid){
             // this.setState({isValid: true});
             console.log(this.state);
-            console.log(`Welcome, ${this.state.name}.  You have logged in successfully.`)
-            this.setState(this.initialState)
+            this.calcResult();
+            // console.log(`Welcome, ${this.state.name}.  You have logged in successfully.`)
+            // this.setState(this.initialState)
         }else{
             console.log('invalid input')
         }
@@ -126,72 +150,72 @@ import Calculator from './Calculator.js'
         // const welcomeMsg = <div>Welcome, {this.state.name}. You have logged in successfully!</div>
 
         return(
-            <Container className="wrapper" fluid={true}>
-                <Container className="form-wrapper form-wrapper-width">
-                    <Row>
-                        <Col>
-                            <form className="m-4" onSubmit={this.handleSubmit} noValidate >
-                                <h3>Mortgage Calculator</h3>
-                                <div >
-                                    {/* <label htmlFor="Home Price">Home Price: </label> */}
-                                    <input
-                                        className={formErrors.homePriceError.length > 0 ? "error" : null}
-                                        type="text"
-                                        name="homePrice"
-                                        placeholder="$ Home price"
-                                        value={this.state.homePrice}
-                                        onChange={this.handleChange}
-                                    />
-                                </div>
-                                <div >
-                                    {/* <label htmlFor="Down Payment">Down Payment: </label> */}
-                                    <input
-                                        className={formErrors.downPaymentError.length > 0 ? "error" : null}
-                                        type="text"
-                                        name="downPayment"
-                                        placeholder="$ Down Payment"
-                                        value={this.state.downPayment}
-                                        onChange={this.handleChange}
-                                    />
-                                </div>
-                                <div className='errorMsg'>{this.state.formErrors.downPaymentError}</div>
-                                <div> 
-                                    {/* <label htmlFor="Loan Term">Loan Term: </label> */}
-                                    <input
-                                        className={formErrors.loanTermError.length > 0 ? "error" : null}
-                                        type="text"
-                                        name="loanTerm"
-                                        placeholder="Loan Term (yrs.)"
-                                        value={this.state.loanTerm}
-                                        onChange={this.handleChange}
+                <div>
+                    <Container className="form-wrapper form-wrapper-width">
+                        <Row>
+                            <Col>
+                                <form className="m-4" onSubmit={this.handleSubmit} noValidate >
+                                    <h3>Mortgage Calculator</h3>
+                                    <div >
+                                        {/* <label htmlFor="Home Price">Home Price: </label> */}
+                                        <input
+                                            className={formErrors.homePriceError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="homePrice"
+                                            placeholder="$ Home price"
+                                            value={this.state.homePrice}
+                                            onChange={this.handleChange}
+                                        />
+                                    </div>
+                                    <div >
+                                        {/* <label htmlFor="Down Payment">Down Payment: </label> */}
+                                        <input
+                                            className={formErrors.downPaymentError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="downPayment"
+                                            placeholder="$ Down Payment"
+                                            value={this.state.downPayment}
+                                            onChange={this.handleChange}
+                                        />
+                                    </div>
+                                    <div className='errorMsg'>{this.state.formErrors.downPaymentError}</div>
+                                    <div> 
+                                        {/* <label htmlFor="Loan Term">Loan Term: </label> */}
+                                        <input
+                                            className={formErrors.loanTermError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="loanTerm"
+                                            placeholder="Loan Term (yrs.)"
+                                            value={this.state.loanTerm}
+                                            onChange={this.handleChange}
 
-                                    />
-                                </div>
-                                <div className='errorMsg'>{this.state.formErrors.loanTermError}</div>
-                                <div>
-                                    {/* <label htmlFor="interestRate">Interest Rate: </label> */}
-                                    <input
-                                        className={formErrors.interestRateError.length > 0 ? "error" : null}
-                                        type="text"
-                                        name="interestRate"
-                                        placeholder="Interest Rate (%)"
-                                        value={this.state.interestRate}
-                                        onChange={this.handleChange}
+                                        />
+                                    </div>
+                                    <div className='errorMsg'>{this.state.formErrors.loanTermError}</div>
+                                    <div>
+                                        {/* <label htmlFor="interestRate">Interest Rate: </label> */}
+                                        <input
+                                            className={formErrors.interestRateError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="interestRate"
+                                            placeholder="Interest Rate (%)"
+                                            value={this.state.interestRate}
+                                            onChange={this.handleChange}
 
-                                    />
-                                </div>
-                                <div className='errorMsg'>{this.state.formErrors.interestRateError}</div>
-                                <div>
-                                    <Button className='btnSubmit' type="submit">Submit</Button>
-                                </div>
-                                <a href="/"> <small>Don't have an account? Sign up</small></a>
-                            </form>
-                            {/* {this.state.isValid ? welcomeMsg : ""} */}
-                        </Col>
-                    </Row>
-                </Container>
-                <Calculator data={this.state.homePrice}></Calculator>
-            </Container>
+                                        />
+                                    </div>
+                                    <div className='errorMsg'>{this.state.formErrors.interestRateError}</div>
+                                    <div>
+                                        <Button className='btnSubmit' type="submit">Submit</Button>
+                                    </div>
+                                    <a href="/"> <small>Don't have an account? Sign up</small></a>
+                                </form>
+                                {/* {this.state.isValid ? welcomeMsg : ""} */}
+                            </Col>
+                        </Row>
+                    </Container>
+                    <Calculator data={this.state}></Calculator>
+                </div>
         );
     }
 }

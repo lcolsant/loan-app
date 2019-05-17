@@ -8,40 +8,29 @@ import { Container, Row, Col } from 'react-bootstrap';
     
     
     
-    // constructor(props){
-    //     super(props);
-    //     this.state = {
-
-    //     }
-    // }
+    constructor(props){
+        super(props);
+        this.state = {
+            // test: this.props.data
+        }
+    }
     
     
     render(){
 
         return(
-            <Container className="wrapper" fluid={true}>
                 <Container className="form-wrapper form-wrapper-width">
                     <Row>
                         <Col>
                             <form className="m-4" noValidate >
                                 <h3>Summary</h3>
                                 <div >
-                                    Home Price: {this.props.data}
-                                </div>
-                                <div >
-                                    text here
-                                </div>
-                                <div> 
-                                    text here
-                                </div>
-                                <div>
-                                    text here
+                                    Monthly Payment: {this.props.data.payment}
                                 </div>
                             </form>
                         </Col>
                     </Row>
                 </Container>
-            </Container>
         );
     }
 }
