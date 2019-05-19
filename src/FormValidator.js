@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import './FormValidator.css';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import Calculator from './Calculator.js'
+import accounting from 'accounting-js'
+
+let money = accounting.format;
 
 
 
@@ -31,6 +34,7 @@ import Calculator from './Calculator.js'
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validate = this.validate.bind(this);
+        this.reset = this.reset.bind(this);
     }
     
     
@@ -39,15 +43,15 @@ import Calculator from './Calculator.js'
         console.log(this.state);
         let principal = parseInt(homePrice) - parseInt(downPayment);
         let num = (  (parseFloat(interestRate) / 100) / 12 ) * principal;
-        console.log(num);
+        // console.log(num);
         let denom1 = (1+  (  (parseFloat(interestRate)/100) / 12))
         let denom2 = -(parseInt(loanTerm)*12)  
         let denom3 = Math.pow(denom1,denom2)
         let denom = 1- denom3;
-        console.log(denom)
+        // console.log(denom)
         let monthly_payment = num / denom;
 
-        console.log(`monthly payment:  ${monthly_payment}`)
+        console.log(`monthly payment:  ${money(monthly_payment)}`)
 
         this.setState({payment:monthly_payment});
 
@@ -144,6 +148,10 @@ import Calculator from './Calculator.js'
 
     }
 
+    reset(){
+        this.setState(this.initialState)
+    }
+
     render(){
 
         const {formErrors} = this.state
@@ -207,6 +215,7 @@ import Calculator from './Calculator.js'
                                     <div className='errorMsg'>{this.state.formErrors.interestRateError}</div>
                                     <div>
                                         <Button className='btnSubmit' type="submit">Submit</Button>
+                                        <Button className='btnSubmit' type="submit" onClick={()=>this.reset()}>Reset</Button>
                                     </div>
                                     <a href="/"> <small>Don't have an account? Sign up</small></a>
                                 </form>
