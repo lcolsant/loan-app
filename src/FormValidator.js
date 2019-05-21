@@ -6,7 +6,14 @@ import accounting from 'accounting-js'
 
 let money = accounting.format;
 
-
+const numRegex = new RegExp(
+    /^(\d+)+(\.?\d*)?$/
+  
+);
+const intRegex = new RegExp(
+    /^[0-9]*$/
+  
+);
 
 
   class FormValidator extends Component{
@@ -21,7 +28,6 @@ let money = accounting.format;
             loanTerm: "",
             interestRate: "",
             payment: null,
-            // isValid: false,
             formErrors: {
                 homePriceError:'',
                 downPaymentError:'',
@@ -43,12 +49,10 @@ let money = accounting.format;
         console.log(this.state);
         let principal = parseInt(homePrice) - parseInt(downPayment);
         let num = (  (parseFloat(interestRate) / 100) / 12 ) * principal;
-        // console.log(num);
         let denom1 = (1+  (  (parseFloat(interestRate)/100) / 12))
         let denom2 = -(parseInt(loanTerm)*12)  
         let denom3 = Math.pow(denom1,denom2)
         let denom = 1- denom3;
-        // console.log(denom)
         let monthly_payment = num / denom;
 
         console.log(`monthly payment:  ${money(monthly_payment)}`)
@@ -63,11 +67,8 @@ let money = accounting.format;
         e.preventDefault();
         const isValid = this.validate(this.state);
         if(isValid){
-            // this.setState({isValid: true});
             console.log(this.state);
             this.calcResult();
-            // console.log(`Welcome, ${this.state.name}.  You have logged in successfully.`)
-            // this.setState(this.initialState)
         }else{
             console.log('invalid input')
         }
@@ -82,43 +83,62 @@ let money = accounting.format;
         console.log(name);
         console.log(value)
 
-        // switch(name){
 
-        //     case 'name':
-        //         if(value){
-        //             formErrors.nameError = ''
-        //             console.log('in nameValidator+')
-        //             break;
-        //         }else{
-        //             formErrors.nameError = 'You must enter a name'
-        //             console.log('in nameValidator-')
-        //             break;
-        //         }
-        //     case 'email':
-        //         if(emailRegex.test(value)){
-        //             formErrors.emailError = '';
-        //             console.log('in emailValidator+')
-        //             break;
-        //         }else{
-        //             formErrors.emailError = 'Please enter a valid email'; 
-        //             console.log('in emailValidator-')
-        //             break;
-        //         }
+        switch(name){
 
-        //     case 'password':
-        //         console.log(`password length: ${value.length}`)
-        //         if(value.length>3){
-        //             formErrors.passwordError = '';
-        //             console.log('in passwordValidator+')
-        //             break;
-        //         }else{
-        //             formErrors.passwordError = 'Password must be longer than 3 characters';
-        //             console.log('in passwordValidator-')
-        //             break;
-        //         }
-        //     default:
-        //         break;
-        // }
+            case 'homePrice':
+                if(numRegex.test(value)){
+                    
+                    formErrors.homePriceError = ''
+                    console.log('in homePriceValidator+')
+                    break;
+                }else{
+
+                    formErrors.homePriceError = 'Please enter a valid number'
+                    console.log('in homePriceValidator-')
+                    break;
+                }
+            case 'downPayment':
+                if(numRegex.test(value)){
+                    
+                    formErrors.downPaymentError = ''
+                    console.log('in downPaymentValidator+')
+                    break;
+                }else{
+
+                    formErrors.downPaymentError = 'Please enter a valid number'
+                    console.log('in downPaymentValidator-')
+                    break;
+                }
+            case 'loanTerm':
+                if(intRegex.test(value)){
+                    
+                    formErrors.loanTermError = ''
+                    console.log('in loanTermValidator+')
+                    break;
+                }else{
+
+                    formErrors.loanTermError = 'Please enter an integer'
+                    console.log('in loanTermValidator-')
+                    break;
+                }
+            case 'interestRate':
+                if(numRegex.test(value)){
+                    
+                    formErrors.interestRateError = ''
+                    console.log('in interestRateValidator+')
+                    break;
+                }else{
+
+                    formErrors.interestRateError = 'Please enter a valid number'
+                    console.log('in interestRateValidator-')
+                    break;
+                }
+
+
+            default:
+                break;
+        }
 
         
         this.setState({
@@ -155,7 +175,6 @@ let money = accounting.format;
     render(){
 
         const {formErrors} = this.state
-        // const welcomeMsg = <div>Welcome, {this.state.name}. You have logged in successfully!</div>
 
         return(
                 <div>
@@ -170,23 +189,24 @@ let money = accounting.format;
                                             className={formErrors.homePriceError.length > 0 ? "error" : null}
                                             type="text"
                                             name="homePrice"
-                                            placeholder="$ Home price"
+                                            placeholder="Home price ($)"
                                             value={this.state.homePrice}
                                             onChange={this.handleChange}
                                         />
                                     </div>
+                                    {/* <div className='errorMsg'>{this.state.formErrors.homePriceError}</div> */}
                                     <div >
                                         {/* <label htmlFor="Down Payment">Down Payment: </label> */}
                                         <input
                                             className={formErrors.downPaymentError.length > 0 ? "error" : null}
                                             type="text"
                                             name="downPayment"
-                                            placeholder="$ Down Payment"
+                                            placeholder="Down Payment ($)"
                                             value={this.state.downPayment}
                                             onChange={this.handleChange}
                                         />
                                     </div>
-                                    <div className='errorMsg'>{this.state.formErrors.downPaymentError}</div>
+                                    {/* <div className='errorMsg'>{this.state.formErrors.downPaymentError}</div> */}
                                     <div> 
                                         {/* <label htmlFor="Loan Term">Loan Term: </label> */}
                                         <input
@@ -199,7 +219,7 @@ let money = accounting.format;
 
                                         />
                                     </div>
-                                    <div className='errorMsg'>{this.state.formErrors.loanTermError}</div>
+                                    {/* <div className='errorMsg'>{this.state.formErrors.loanTermError}</div> */}
                                     <div>
                                         {/* <label htmlFor="interestRate">Interest Rate: </label> */}
                                         <input
@@ -212,14 +232,12 @@ let money = accounting.format;
 
                                         />
                                     </div>
-                                    <div className='errorMsg'>{this.state.formErrors.interestRateError}</div>
+                                    {/* <div className='errorMsg'>{this.state.formErrors.interestRateError}</div> */}
                                     <div>
                                         <Button className='btnSubmit' type="submit">Submit</Button>
                                         <Button className='btnSubmit' type="submit" onClick={()=>this.reset()}>Reset</Button>
                                     </div>
-                                    <a href="/"> <small>Don't have an account? Sign up</small></a>
                                 </form>
-                                {/* {this.state.isValid ? welcomeMsg : ""} */}
                             </Col>
                         </Row>
                     </Container>
