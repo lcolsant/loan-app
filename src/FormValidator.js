@@ -3,6 +3,9 @@ import './FormValidator.css';
 import { Button, Container, Row, Col } from 'react-bootstrap';
 import Calculator from './Calculator.js'
 import accounting from 'accounting-js'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCalculator } from '@fortawesome/free-solid-svg-icons'
+
 
 let money = accounting.format;
 
@@ -182,6 +185,9 @@ const intRegex = new RegExp(
                         <Row>
                             <Col>
                                 <form className="m-4" onSubmit={this.handleSubmit} noValidate >
+                                    <div className="faCalculator">
+                                        <FontAwesomeIcon icon={faCalculator}  />
+                                    </div>
                                     <h3>Mortgage Calculator</h3>
                                     <div >
                                         {/* <label htmlFor="Home Price">Home Price: </label> */}
