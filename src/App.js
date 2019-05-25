@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import FormValidator from './FormValidator.js'
 import { Container } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 
 
 
@@ -10,7 +10,7 @@ function App() {
   return (
     <Container className="wrapper" fluid={true}>
       <div className="App">
-       <FormValidator></FormValidator>
+        <FormValidator></FormValidator>
       </div>
     </Container>
   );

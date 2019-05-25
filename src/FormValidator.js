@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './FormValidator.css';
-import { Button, Container, Row, Col } from 'react-bootstrap';
+import { Button, Container, Row, Col, Collapse } from 'react-bootstrap';
 import Calculator from './Calculator.js'
 import accounting from 'accounting-js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -30,13 +30,24 @@ const intRegex = new RegExp(
             downPayment: "",
             loanTerm: "",
             interestRate: "",
+            propTax: "",
+            monthlyPropTax: "",
+            insurance: "",
+            monthlyInsurance: "",
+            hoa: "",
+            monthlyHoa: "",
             payment: null,
+            totalPayment: null,
             formErrors: {
                 homePriceError:'',
                 downPaymentError:'',
                 loanTermError:'',
                 interestRateError:'',
+                propTaxError:'',
+                insuranceError:'',
+                hoaError:'',
             },
+            collapse: false
         }
         
         this.initialState = this.state;
@@ -44,23 +55,45 @@ const intRegex = new RegExp(
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validate = this.validate.bind(this);
         this.reset = this.reset.bind(this);
+        this.toggle = this.toggle.bind(this);
     }
+
+
+    toggle() {
+        this.setState(state => ({ collapse: !state.collapse }));
+    }
+
     
     
     calcResult(){
-        const {homePrice, downPayment, loanTerm, interestRate, payment} = this.state
+        const {homePrice, downPayment, loanTerm, interestRate, payment, propTax, insurance, hoa} = this.state
         console.log(this.state);
         let principal = parseInt(homePrice) - parseInt(downPayment);
         let num = (  (parseFloat(interestRate) / 100) / 12 ) * principal;
-        let denom1 = (1+  (  (parseFloat(interestRate)/100) / 12))
+        let denom1 = (1 + ( (parseFloat(interestRate)/100) / 12))
         let denom2 = -(parseInt(loanTerm)*12)  
         let denom3 = Math.pow(denom1,denom2)
         let denom = 1- denom3;
         let monthly_payment = num / denom;
 
-        console.log(`monthly payment:  ${money(monthly_payment)}`)
+        console.log(`interest + principal:  ${money(monthly_payment)}`)
 
-        this.setState({payment:monthly_payment});
+        let moPropTax = parseFloat(propTax) / 12;
+        let moInsurance = parseFloat(insurance) / 12;
+        let moHoa =  parseFloat(hoa);
+
+        let totalPayment = monthly_payment + moPropTax + moInsurance + moHoa;
+
+        this.setState({
+            payment:monthly_payment,
+            monthlyPropTax: moPropTax,
+            monthlyInsurance: moInsurance,
+            monthlyHoa: moHoa,
+            totalPayment
+        });
+
+
+
 
         return payment
 
@@ -163,9 +196,9 @@ const intRegex = new RegExp(
           val.length > 0 && (valid = false);
         });
       
-        Object.values(rest).forEach(val => {
-          val === '' && (valid = false);
-        });
+        // Object.values(rest).forEach(val => {
+        //   val === '' && (valid = false);
+        // });
       
         return valid;
 
@@ -180,7 +213,7 @@ const intRegex = new RegExp(
         const {formErrors} = this.state
 
         return(
-                <div>
+                <div className='wrapper-outer'>
                     <Container className="form-wrapper form-wrapper-width">
                         <Row>
                             <Col>
@@ -238,12 +271,57 @@ const intRegex = new RegExp(
 
                                         />
                                     </div>
+                                    {/* <button data-toggle="collapse" data-target="#advanced">Collapsible</button> */}
+                                    {/* <div> */}
+                                    {/* <a href="#" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Advanced</a> */}
+                                    {/* <Button type="href" onClick={this.toggle}>Advanced</Button> */}
+                                    {/* </div> */}
+                                        {/* <Collapse in={this.state.collapse}> */}
+                                        
+                                            {/* <label htmlFor="interestRate">Interest Rate: </label> */}
+                                    <div>
+                                        <input
+                                            className={formErrors.propTaxError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="propTax"
+                                            placeholder="$ Property Tax /year"
+                                            value={this.state.propTax}
+                                            onChange={this.handleChange}
+
+                                        />
+                                    </div>
+                                    <div>
+                                        <input
+                                            className={formErrors.insuranceError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="insurance"
+                                            placeholder="$ Insurance /year"
+                                            value={this.state.insurance}
+                                            onChange={this.handleChange}
+
+                                        />
+                                    </div>
+                                    <div>
+                                        <input
+                                            className={formErrors.hoaError.length > 0 ? "error" : null}
+                                            type="text"
+                                            name="hoa"
+                                            placeholder="$ HOA dues /mo"
+                                            value={this.state.hoa}
+                                            onChange={this.handleChange}
+
+                                        />
+                                    </div>
+                                        {/* </Collapse> */}
+
+
                                     {/* <div className='errorMsg'>{this.state.formErrors.interestRateError}</div> */}
                                     <div>
                                         <Button className='btnSubmit' type="submit">Submit</Button>
                                         <Button className='btnSubmit' type="submit" onClick={()=>this.reset()}>Reset</Button>
                                     </div>
                                 </form>
+ 
                             </Col>
                         </Row>
                     </Container>
