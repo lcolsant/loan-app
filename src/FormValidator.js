@@ -47,7 +47,9 @@ const intRegex = new RegExp(
                 insuranceError:'',
                 hoaError:'',
             },
-            collapse: false
+            // open: false,
+            submitted: false,
+            // collapse: false
         }
         
         this.initialState = this.state;
@@ -55,13 +57,13 @@ const intRegex = new RegExp(
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validate = this.validate.bind(this);
         this.reset = this.reset.bind(this);
-        this.toggle = this.toggle.bind(this);
+        // this.toggle = this.toggle.bind(this);
     }
 
 
-    toggle() {
-        this.setState(state => ({ collapse: !state.collapse }));
-    }
+    // toggle() {
+    //     this.setState(state => ({ collapse: !state.collapse }));
+    // }
 
     
     
@@ -92,9 +94,6 @@ const intRegex = new RegExp(
             totalPayment
         });
 
-
-
-
         return payment
 
     }
@@ -103,8 +102,13 @@ const intRegex = new RegExp(
         e.preventDefault();
         const isValid = this.validate(this.state);
         if(isValid){
+            // const { open } = this.state;
+            const { submitted } = this.state;
             console.log(this.state);
             this.calcResult();
+            // this.setState({ open: !open })
+            this.setState({ submitted: !submitted })
+
         }else{
             console.log('invalid input')
         }
@@ -170,6 +174,39 @@ const intRegex = new RegExp(
                     console.log('in interestRateValidator-')
                     break;
                 }
+            case 'propTax':
+                if(numRegex.test(value)){
+                    console.log('in propTaxValidator+')                    
+                    formErrors.propTaxError = ''
+                    break;
+                }else{
+
+                    formErrors.propTaxError = 'Please enter a valid number'
+                    console.log('in propTaxValidator-')
+                    break;
+                }
+            case 'insurance':
+                if(numRegex.test(value)){
+                    console.log('in insuranceValidator+')                    
+                    formErrors.insuranceError = ''
+                    break;
+                }else{
+
+                    formErrors.insuranceError = 'Please enter a valid number'
+                    console.log('in insuranceValidator-')
+                    break;
+                }
+            case 'hoa':
+                if(numRegex.test(value)){
+                    console.log('in HOAValidator+')                    
+                    formErrors.hoaError = ''
+                    break;
+                }else{
+
+                    formErrors.hoaError = 'Please enter a valid number'
+                    console.log('in hoaValidator-')
+                    break;
+                }
 
 
             default:
@@ -206,6 +243,7 @@ const intRegex = new RegExp(
 
     reset(){
         this.setState(this.initialState)
+        console.log(`submitted: ${this.state.submitted}`)
     }
 
     render(){
@@ -317,7 +355,7 @@ const intRegex = new RegExp(
 
                                     {/* <div className='errorMsg'>{this.state.formErrors.interestRateError}</div> */}
                                     <div>
-                                        <Button className='btnSubmit' type="submit">Submit</Button>
+                                        <Button className='btnSubmit' type="submit" >Submit</Button>
                                         <Button className='btnSubmit' type="submit" onClick={()=>this.reset()}>Reset</Button>
                                     </div>
                                 </form>
@@ -325,7 +363,9 @@ const intRegex = new RegExp(
                             </Col>
                         </Row>
                     </Container>
-                    <Calculator data={this.state}></Calculator>
+                    {/* {this.state.submitted ? <Calculator data={this.state}></Calculator> : ""} */}
+                    {this.state.submitted && <Calculator data={this.state}></Calculator> }
+
                 </div>
         );
     }

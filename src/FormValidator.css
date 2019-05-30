@@ -30,6 +30,12 @@ input {
     font-weight: 500;
     padding: 4px;
     margin-left: 15px;
+    border: 1.5px solid #A9ACA9;
+
+}
+
+input:hover {
+    border: 1.5px solid #8CBA80;
 
 }
 
@@ -72,6 +78,11 @@ a:hover {
     border: 1px solid #8CBA80;
     
 }
+.btnSubmit:focus {
+    box-shadow: none;
+
+}
+
 
 .faCalculator {
     font-size: 2rem;

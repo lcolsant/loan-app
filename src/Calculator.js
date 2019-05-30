@@ -28,19 +28,19 @@ let money = accounting.format;
                             <form className="m-4" noValidate >
                                 <h3>Your Payment</h3>
                                 <div >
-                                    Principal + Interest: { this.props.data.payment ? money(this.props.data.payment) : this.props.data.payment }
+                                    Principal + Interest: { this.props.data.payment ? money(this.props.data.payment) : null }
                                 </div>
                                 <div >
-                                    Taxes: { this.props.data.monthlyPropTax ? money(this.props.data.monthlyPropTax) : this.props.data.monthlyPropTax }
+                                    Taxes: { this.props.data.monthlyPropTax ? money(this.props.data.monthlyPropTax) : null }
                                 </div>
                                 <div >
-                                    Insurance: { this.props.data.monthlyInsurance ? money(this.props.data.monthlyInsurance) : this.props.data.monthlyInsurance }
+                                    Insurance: { this.props.data.monthlyInsurance ? money(this.props.data.monthlyInsurance) : null }
                                 </div>
                                 <div >
-                                    HOA: { this.props.data.monthlyHoa ? money(this.props.data.monthlyHoa) : this.props.data.monthlyHoa }
+                                    HOA: { this.props.data.monthlyHoa ? money(this.props.data.monthlyHoa) : null }
                                 </div>
                                 <div className='payment' >
-                                    Est. Monthly Payment: <b> { this.props.data.totalPayment ? money(this.props.data.totalPayment) : this.props.data.totalPayment } </b>
+                                    Est. Monthly Payment: <b> { this.props.data.totalPayment ? money(this.props.data.totalPayment) : null } </b>
                                 </div>
                             </form>
                         </Col>
