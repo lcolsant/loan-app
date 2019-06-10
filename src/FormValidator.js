@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import './FormValidator.css';
-import { Button, Container, Row, Col, Collapse } from 'react-bootstrap';
+import { Button, Container, Row, Col } from 'react-bootstrap';
 import Calculator from './Calculator.js'
-import accounting from 'accounting-js'
+// import accounting from 'accounting-js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalculator } from '@fortawesome/free-solid-svg-icons'
 
 
-let money = accounting.format;
+// let money = accounting.format;
 
 const numRegex = new RegExp(
     /^(\d+)+(\.?\d*)?$/
@@ -38,6 +38,7 @@ const intRegex = new RegExp(
             monthlyHoa: "",
             payment: null,
             totalPayment: null,
+            submitted: false,
             formErrors: {
                 homePriceError:'',
                 downPaymentError:'',
@@ -47,9 +48,6 @@ const intRegex = new RegExp(
                 insuranceError:'',
                 hoaError:'',
             },
-            // open: false,
-            submitted: false,
-            // collapse: false
         }
         
         this.initialState = this.state;
@@ -57,19 +55,12 @@ const intRegex = new RegExp(
         this.handleSubmit = this.handleSubmit.bind(this);
         this.validate = this.validate.bind(this);
         this.reset = this.reset.bind(this);
-        // this.toggle = this.toggle.bind(this);
     }
 
 
-    // toggle() {
-    //     this.setState(state => ({ collapse: !state.collapse }));
-    // }
-
-    
     
     calcResult(){
         const {homePrice, downPayment, loanTerm, interestRate, payment, propTax, insurance, hoa} = this.state
-        console.log(this.state);
         let principal = parseInt(homePrice) - parseInt(downPayment);
         let num = (  (parseFloat(interestRate) / 100) / 12 ) * principal;
         let denom1 = (1 + ( (parseFloat(interestRate)/100) / 12))
@@ -78,7 +69,7 @@ const intRegex = new RegExp(
         let denom = 1- denom3;
         let monthly_payment = num / denom;
 
-        console.log(`interest + principal:  ${money(monthly_payment)}`)
+        // console.log(`interest + principal:  ${money(monthly_payment)}`)
 
         let moPropTax = parseFloat(propTax) / 12;
         let moInsurance = parseFloat(insurance) / 12;
@@ -103,11 +94,11 @@ const intRegex = new RegExp(
         const isValid = this.validate(this.state);
         if(isValid){
             // const { open } = this.state;
-            const { submitted } = this.state;
+            this.setState({ submitted: true },
+                console.log(`submitted?: ${this.state.submitted}`))
             console.log(this.state);
+            
             this.calcResult();
-            // this.setState({ open: !open })
-            this.setState({ submitted: !submitted })
 
         }else{
             console.log('invalid input')
@@ -191,9 +182,8 @@ const intRegex = new RegExp(
                     formErrors.insuranceError = ''
                     break;
                 }else{
-
                     formErrors.insuranceError = 'Please enter a valid number'
-                    console.log('in insuranceValidator-')
+                    console.log('in insuranceValidator-')   
                     break;
                 }
             case 'hoa':
@@ -244,6 +234,7 @@ const intRegex = new RegExp(
     reset(){
         this.setState(this.initialState)
         console.log(`submitted: ${this.state.submitted}`)
+
     }
 
     render(){
@@ -309,14 +300,6 @@ const intRegex = new RegExp(
 
                                         />
                                     </div>
-                                    {/* <button data-toggle="collapse" data-target="#advanced">Collapsible</button> */}
-                                    {/* <div> */}
-                                    {/* <a href="#" onClick={this.toggle} style={{ marginBottom: '1rem' }}>Advanced</a> */}
-                                    {/* <Button type="href" onClick={this.toggle}>Advanced</Button> */}
-                                    {/* </div> */}
-                                        {/* <Collapse in={this.state.collapse}> */}
-                                        
-                                            {/* <label htmlFor="interestRate">Interest Rate: </label> */}
                                     <div>
                                         <input
                                             className={formErrors.propTaxError.length > 0 ? "error" : null}
@@ -350,8 +333,6 @@ const intRegex = new RegExp(
 
                                         />
                                     </div>
-                                        {/* </Collapse> */}
-
 
                                     {/* <div className='errorMsg'>{this.state.formErrors.interestRateError}</div> */}
                                     <div>
@@ -364,11 +345,11 @@ const intRegex = new RegExp(
                         </Row>
                     </Container>
                     {/* {this.state.submitted ? <Calculator data={this.state}></Calculator> : ""} */}
-                    {this.state.submitted && <Calculator data={this.state}></Calculator> }
+                    { this.state.submitted && <Calculator data={this.state}></Calculator> }
 
                 </div>
         );
     }
-}
+}   
 
 export default FormValidator
